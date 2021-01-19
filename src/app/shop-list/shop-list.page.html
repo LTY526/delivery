@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Shops in your area:</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="myBackButton()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card (click)="openShop(1)">
+    <img src="../../assets/kr.png" />
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon class="icon" name="cash"></ion-icon>
+        <ion-icon class="icon" name="cash-outline"></ion-icon>
+        <ion-icon class="icon" name="cash-outline"></ion-icon>
+      </ion-card-subtitle>
+      <ion-card-title>Kedai Runcit EZ</ion-card-title>
+      <ion-card-subtitle>
+        <ion-icon name="location-outline"></ion-icon>
+        1.0KM
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Everything you need in your daily life.
+    </ion-card-content>
+    <ion-card-content>
+      <span class="spann">RM 5</span> Delivery | 
+      <span class="spann">RM 5</span> Min. order
+    </ion-card-content>
+  </ion-card>
+  <ion-card (click)="openShop(2)">
+    <img src="../../assets/nglo.jpg" />
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon class="icon" name="cash"></ion-icon>
+        <ion-icon class="icon" name="cash-outline"></ion-icon>
+        <ion-icon class="icon" name="cash-outline"></ion-icon>
+      </ion-card-subtitle>
+      <ion-card-title>Nature Green Life Organic</ion-card-title>
+      <ion-card-subtitle>
+        <ion-icon name="location-outline"></ion-icon>
+        0.8KM
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Fresh vegetables delivered to your doorstep.
+    </ion-card-content>
+    <ion-card-content>
+      <span class="spann">RM 5</span> Delivery | 
+      <span class="spann">RM 5</span> Min. order
+    </ion-card-content>
+  </ion-card>
+  <ion-card (click)="openShop(3)">
+    <img src="../../assets/tesco.png" />
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon class="icon" name="cash"></ion-icon>
+        <ion-icon class="icon" name="cash"></ion-icon>
+        <ion-icon class="icon" name="cash-outline"></ion-icon>
+      </ion-card-subtitle>
+      <ion-card-title>Tesco</ion-card-title>
+      <ion-card-subtitle>
+        <ion-icon name="location-outline"></ion-icon>
+        0.5KM
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Provides grocery with the best price.
+    </ion-card-content>
+    <ion-card-content>
+      <span class="spann">RM 5</span> Delivery | 
+      <span class="spann">RM 5</span> Min. order
+    </ion-card-content>
+  </ion-card>
+</ion-content>

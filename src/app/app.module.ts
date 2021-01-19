@@ -15,6 +15,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
+import { CartModalPageModule } from './cart-modal/cart-modal.module';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -26,6 +28,7 @@ import { environment } from 'src/environments/environment';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    CartModalPageModule,
   ],
   providers: [
     StatusBar,

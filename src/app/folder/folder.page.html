@@ -14,11 +14,16 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
+  <!--<div id="container">
     <strong class="capitalize">{{ folder }}</strong>
     <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Comasdasdasdponents</a></p>
-  </div>
-  <div *ngIf="folder == 'Inbox'">
-    asdasdasdasdad
+  </div>-->
+  <div *ngIf="folder == 'Main'">
+    <p>here maybe add fake map or fake function to set delivery information (address name etc)</p>
+    <p>Set role in firebase so riderz acc dont access functions for buyers, vice versa</p>
+    <p>(Maybe after set address only can click?)</p>
+    <ion-button (click)="viewShop()" expand="block" fill="clear" shape="round">
+      View Shop
+    </ion-button>
   </div>
 </ion-content>

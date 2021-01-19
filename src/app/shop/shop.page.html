@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="shopID == 1">Kedai Runcit EZ</ion-title>
+    <ion-title *ngIf="shopID == 2">Nature Green Life Organic</ion-title>
+    <ion-title *ngIf="shopID == 3">Tesco</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="myBackButton()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openCart()" #cart>
+      <div class="cart-length">{{ cartItemCount | async }}</div>
+      <ion-icon name="cart" class="cart-icon"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-list>
+    <ion-item *ngFor="let x of products">
+      <div class="imgDiv">
+        <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+      </div>
+      <ion-label>
+        <h2>{{x.name}}</h2>
+        <p>{{x.price | currency:'RM'}} per unit</p>
+      </ion-label>
+      <ion-button style="float: right;" (click)="addToCart(x)">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

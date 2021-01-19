@@ -20,13 +20,13 @@ export class AppComponent implements OnInit {
       icon: 'home'
     },
     {
-      title: 'Outbox',
-      url: '/folder/Outbox',
+      title: 'Other Function',
+      url: '/folder/OFunc',
       icon: 'paper-plane'
     },
     {
-      title: 'Favorites',
-      url: '/folder/Favorites',
+      title: 'Other Function 2',
+      url: '/folder/OFunc2',
       icon: 'heart'
     },
   ];

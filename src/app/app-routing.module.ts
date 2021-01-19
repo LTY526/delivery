@@ -5,7 +5,7 @@ import { AuthGuard } from './services/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Home',
+    redirectTo: 'folder/Main',
     pathMatch: 'full'
   },
   {
@@ -20,6 +20,18 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./initial/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'shop-list',
+    loadChildren: () => import('./shop-list/shop-list.module').then( m => m.ShopListPageModule)
+  },
+  {
+    path: 'shop/:id',
+    loadChildren: () => import('./shop/shop.module').then( m => m.ShopPageModule)
+  },
+  {
+    path: 'cart-modal',
+    loadChildren: () => import('./cart-modal/cart-modal.module').then( m => m.CartModalPageModule)
   }
 ];
 
