@@ -36,6 +36,10 @@ const routes: Routes = [
   {
     path: 'select-map-modal',
     loadChildren: () => import('./select-map-modal/select-map-modal.module').then( m => m.SelectMapModalPageModule)
+  },
+  {
+    path: 'view-order/:id',
+    loadChildren: () => import('./view-order/view-order.module').then( m => m.ViewOrderPageModule)
   }
 ];
 

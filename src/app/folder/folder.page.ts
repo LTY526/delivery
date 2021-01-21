@@ -18,6 +18,7 @@ import { CartService } from '../services/cart.service';
   styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
+  dateNow: any;
   public folder: string;
   public profileForm: FormGroup;
   //homepage
@@ -30,6 +31,9 @@ export class FolderPage implements OnInit {
   ]
   menuOpen: boolean = false;
   canBeginShop: boolean = false;
+  //order page
+  orderListObj = {};
+  orderList = [];
   //profile page
   info: any[] = [];
   private itemsCollection: AngularFirestoreCollection<any>;
@@ -75,14 +79,16 @@ export class FolderPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.dateNow = firebase.default.firestore.Timestamp.fromDate(new Date());
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
     await this.loadProfile(this.authStateSvc.uid);
+    this.getOrders(this.authStateSvc.uid);
   }
 
   openMenu() {
     this.menuOpen = !this.menuOpen;
   }
-
+  //home page
   async pickAddress(selection: number) {
     //reset
     this.cartSvc.address = null;
@@ -106,7 +112,27 @@ export class FolderPage implements OnInit {
     this.navCtrl.navigateForward(['/shop-list']);
   }
 
-  getProfile(uid) {
+  //order page
+  getOrders(uid: string){
+    this.firestore.firestore.collection('order').where('customerUID', '==', uid).onSnapshot(res => {
+      res.forEach(order => {
+        this.orderListObj[order.id] = order.data();
+        this.orderListObj[order.id].orderID = order.id;
+        this.orderListObj[order.id].date = order.data().timestamp.toDate();
+        this.orderListObj[order.id].duration = this.dateNow - order.data().timestamp;
+      });
+      this.orderList = Object.values(this.orderListObj);
+      console.log(this.orderList);
+    });
+  }
+
+  viewOrder(orderID: string) {
+    this.navCtrl.navigateForward(['/view-order/' + orderID]);
+  }
+
+  //profile page
+  getProfile(uid: string) {
+    console.log(uid)
     this.itemsCollection = this.firestore.collection<any>('userInformation', ref => ref.where('uid', '==', uid));
     return this.itemsCollection.snapshotChanges().pipe(map((info: any[]) => {
       this.info = [];
@@ -118,7 +144,7 @@ export class FolderPage implements OnInit {
     }));
   }
 
-  async loadProfile(uid) {
+  async loadProfile(uid: string) {
     let loader = this.loadingCtrl.create({
       message: "Please wait..."
     });

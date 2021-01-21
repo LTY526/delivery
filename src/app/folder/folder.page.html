@@ -53,6 +53,38 @@
   <p>What to put in this picture space?</p>
 </ion-content>
 
+<ion-content *ngIf="folder == 'Orders'" [fullscreen]="true">
+  <ion-card *ngFor="let o of this.orderList">
+    <ion-card-header>
+      <b>Order:</b> #{{o.orderID}}
+      <b>Created:</b> {{o.date}}
+    </ion-card-header>
+    <ion-card-header>
+      <!--try customize status wording and color-->
+      <b>Status:</b> {{o.status}}
+    </ion-card-header>
+    <ion-card-content>
+      Items:
+      <ion-list>
+        <ion-item *ngFor="let x of o.order">
+          <div class="imgDiv">
+            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+          </div>
+          <ion-label>
+            <h2>{{x.name}}</h2>
+            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-item>
+      <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+      <p style="font-size: 15px;">Estimated Delivery Time: 10minutes</p>
+    </ion-item>
+    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.id)">View</ion-button>
+  </ion-card>
+</ion-content>
+
 <ion-content *ngIf="folder == 'Profile'" [fullscreen]="true">
   <ion-button class="buttons2" (click)="updateInfo(realName, phoneNumber, address)" [hidden]="enableEdit == false">Save</ion-button>
   <ion-button class="buttons2" (click)="openEdit()" *ngIf="enableEdit == false">Edit</ion-button>

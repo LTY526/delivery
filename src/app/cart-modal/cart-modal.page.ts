@@ -13,6 +13,7 @@ import * as firebase from 'firebase/app';
 export class CartModalPage implements OnInit {
 
   cart: Product[] = [];
+  total: number;
  
   constructor(
     public authStateSvc: AuthStateService,
@@ -40,7 +41,8 @@ export class CartModalPage implements OnInit {
   }
  
   getTotal() {
-    return 5 + this.cart.reduce((i, j) => i + j.price * j.amount, 0);
+    this.total = 5 + this.cart.reduce((i, j) => i + j.price * j.amount, 0)
+    return this.total;
   }
  
   close() {
@@ -73,6 +75,7 @@ export class CartModalPage implements OnInit {
       timestamp: firebase.default.firestore.Timestamp.fromDate(new Date()),
       status: 'created',
       riderUID: null,
+      total: this.total,
     };
     let loader = this.loadingCtrl.create({
       message: "Please wait..."
