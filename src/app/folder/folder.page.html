@@ -86,10 +86,6 @@
 </ion-content>
 
 <ion-content *ngIf="folder == 'Profile'" [fullscreen]="true">
-  <ion-button class="buttons2" (click)="updateInfo(realName, phoneNumber, address)" [hidden]="enableEdit == false">Save</ion-button>
-  <ion-button class="buttons2" (click)="openEdit()" *ngIf="enableEdit == false">Edit</ion-button>
-  <ion-button class="buttons2" (click)="discardEdit()" *ngIf="enableEdit == true">Cancel</ion-button>
-  <br>
   <div class="image-placeholder">
     <img *ngIf="photoService.profilePhoto != null" [src]="'data:image/jpeg;base64,' + photoService.profilePhoto">
     <ion-button [hidden]="enableEdit == false" *ngIf="photoService.profilePhoto != null" (click)="removePhoto('photoSvcImg')"><ion-icon name="close-circle"></ion-icon></ion-button>
@@ -134,4 +130,8 @@
     </ion-item>
   </form>
   <br><br>
+  <ion-button class="ion-padding" expand="block" (click)="updateInfo(realName, phoneNumber, address)" [hidden]="enableEdit == false">Save</ion-button>
+  <ion-button class="ion-padding" expand="block" (click)="openEdit()" *ngIf="enableEdit == false">Edit</ion-button>
+  <ion-button class="ion-padding" expand="block" (click)="discardEdit()" *ngIf="enableEdit == true">Cancel</ion-button>
+  <br>
 </ion-content>
