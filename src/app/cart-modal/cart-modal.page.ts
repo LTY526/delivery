@@ -57,10 +57,20 @@ export class CartModalPage implements OnInit {
       alert.present();
       return;
     }
+    if(this.cartService.address == null) {
+      let alert = await this.alertCtrl.create({
+        header: 'Warning!',
+        message: 'No Address',
+        buttons: ['OK']
+      });
+      alert.present();
+      return;
+    }
     //delivery information????
     let order = {
       customerUID: this.authStateSvc.uid,
       order: this.cart,
+      deliveryAdress: this.cartService.address,
       timestamp: firebase.default.firestore.Timestamp.fromDate(new Date()),
       status: 'created',
       riderUID: null,
