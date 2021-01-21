@@ -66,7 +66,6 @@ export class CartModalPage implements OnInit {
       alert.present();
       return;
     }
-    //delivery information????
     let order = {
       customerUID: this.authStateSvc.uid,
       order: this.cart,
