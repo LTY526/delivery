@@ -1,0 +1,22 @@
+<ion-content fullscreen>
+ 
+  <div class="ion-text-end">
+    <ion-button (click)="close()" fill="clear" color="dark">
+      <ion-icon name="close" slot="start"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div>
+    <ion-item style="font-weight: bold;">Set Another Address</ion-item>
+    <ion-item>Jalan Ayer Keroh Lama
+      <ion-icon style="margin-left: 48%;" name="locate-outline"></ion-icon>
+    </ion-item>
+  </div>
+  <div>
+    <ion-img src='../../assets/fake-map.PNG'></ion-img>
+  </div>
+  <div>
+    <ion-button class="ion-padding" expand="block" (click)="close()">Select</ion-button>
+  </div>
+ 
+</ion-content>

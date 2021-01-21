@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { LoadingController, NavController } from '@ionic/angular';
 import { ToastService } from '../../services/toast.service';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-register',
@@ -17,12 +19,13 @@ export class RegisterPage implements OnInit {
     private afAuth: AngularFireAuth,
     private navCtrl: NavController,
     private toastSvc: ToastService,
+    private firestore: AngularFirestore,
   ) { }
 
   ngOnInit() {
   }
 
-  async register() {
+  async register(role: string) {
     if(this.validateForm()) {
       let loader = this.loadingCtrl.create({
         message: "Please wait..."
@@ -33,7 +36,22 @@ export class RegisterPage implements OnInit {
         await this.afAuth
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(data => {
-            console.log(data);
+            if(role == 'rider') {
+              this.firestore.collection('roleList').doc(data.user.uid).set({
+                rider: true,
+                customer: false,
+              });
+            } else if(role == 'customer') {
+              this.firestore.collection('roleList').doc(data.user.uid).set({
+                rider: false,
+                customer: true,
+              });
+            }
+            this.firestore.collection('userInformation').doc(data.user.uid).set({
+              email: data.user.email,
+              uid: data.user.uid,
+              timestamp: firebase.default.firestore.Timestamp.fromDate(new Date()),
+            })
             this.toastSvc.showToast("Created successfuly. Please log in now.");
             this.navCtrl.navigateRoot("/login");
           });

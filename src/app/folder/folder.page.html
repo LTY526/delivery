@@ -3,27 +3,102 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+    <ion-title *ngIf="folder != 'Main'">{{ folder }}</ion-title>
+    <ion-title *ngIf="folder == 'Main'">Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *ngIf="folder == 'Main'" [fullscreen]="true" >
+  <ion-card>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src='assets/image/default-profile.jpg' *ngIf="!image"></ion-img>
+        <ion-img [src]="image" *ngIf="image"></ion-img>
+      </ion-avatar>
+      <ion-label style="margin-left: 5%;">
+        <h3>{{realName}}</h3>
+        <p>{{authStateSvc.email}}</p>
+      </ion-label>
+    </ion-item>
+    <ion-card-header>
+      <ion-card-title>
+        Deliver to: 
+        <ion-button class="btns" size="small" (click)="openMenu()">
+          <ion-icon style="font-size: 15px;" slot="icon-only" name="caret-down-outline"></ion-icon>
+        </ion-button>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-item *ngIf="menuOpen == true">
+      <ion-label text-wrap>
+        <h2>
+          <ion-button (click)="pickAddress(1)" style="height: 40px;" expand="block">Current Address</ion-button>
+          <ion-button (click)="pickAddress(2)" style="height: 40px;" expand="block">Set Another Address</ion-button>
+        </h2>
+      </ion-label>
+    </ion-item>
+    <ion-item>{{cartSvc.address}}</ion-item>
+    <ion-card-content *ngIf="canBeginShop == true && cartSvc.address != null">
+      <ion-button class="ion-padding" expand="block" color="warning" (click)="viewShop()">Shop now</ion-button>
+      <ion-button style="padding-top: 10%;" class="ion-padding" expand="block" color="danger" (click)="viewShop()">View Shop</ion-button>
+      <br>
+    </ion-card-content>
+  </ion-card>
+    
 
-  <!--<div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Comasdasdasdponents</a></p>
-  </div>-->
-  <div *ngIf="folder == 'Main'">
-    <p>here maybe add fake map or fake function to set delivery information (address name etc)</p>
-    <p>Set role in firebase so riderz acc dont access functions for buyers, vice versa</p>
-    <p>(Maybe after set address only can click ↓ ?)</p>
+  <div>
     <ion-button (click)="viewShop()" expand="block" fill="clear" shape="round">
       View Shop
     </ion-button>
   </div>
+</ion-content>
+
+<ion-content *ngIf="folder == 'Profile'" [fullscreen]="true">
+  <ion-button class="buttons2" (click)="updateInfo(realName, phoneNumber, address)" [hidden]="enableEdit == false">Save</ion-button>
+  <ion-button class="buttons2" (click)="openEdit()" *ngIf="enableEdit == false">Edit</ion-button>
+  <ion-button class="buttons2" (click)="discardEdit()" *ngIf="enableEdit == true">Cancel</ion-button>
+  <br>
+  <div class="image-placeholder">
+    <img *ngIf="photoService.profilePhoto != null" [src]="'data:image/jpeg;base64,' + photoService.profilePhoto">
+    <ion-button [hidden]="enableEdit == false" *ngIf="photoService.profilePhoto != null" (click)="removePhoto('photoSvcImg')"><ion-icon name="close-circle"></ion-icon></ion-button>
+    <img *ngIf="this.image && !photoService.profilePhoto" [src]="this.image">
+    <ion-button [hidden]="enableEdit == false" *ngIf="this.image && photoService.profilePhoto == null" (click)="removePhoto('this.Image')"><ion-icon name="close-circle"></ion-icon></ion-button>
+    <img *ngIf="!this.image && !photoService.profilePhoto" src="assets/image/default-profile.jpg">
+  </div>
+  <div>
+    <label class="upload-profile-pic" [hidden]="enableEdit == false" (click)="takeImage()">
+      <ion-icon margin-right name="cloud-download"></ion-icon>
+      &nbsp;Select profile photo
+    </label>
+  </div>
+
+  <br [hidden]="enableEdit == false">
+
+  <form [formGroup]="profileForm" disabled novalidate>
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-input type="email" class="ion-text-end" formControlName="email" [(ngModel)]="email" placeholder={{authStateSvc.email}} disabled></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <ion-input type="text" class="ion-text-end" formControlName="realName" [(ngModel)]="realName" placeholder={{realName}} [disabled]="enableEdit == false"></ion-input>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!profileForm.controls.realName.valid && profileForm.controls.realName.touched" [hidden]="enableEdit == false">
+      <p>Please enter your real name.</p>
+    </ion-item>
+    <ion-item>
+      <ion-label>Phone Number</ion-label>
+      <ion-input type='tel' class="ion-text-end" formControlName="phoneNumber" [(ngModel)]="phoneNumber" placeholder={{phoneNumber}} [disabled]="enableEdit == false"></ion-input>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!profileForm.controls.phoneNumber.valid && profileForm.controls.phoneNumber.touched" [hidden]="enableEdit == false">
+      <p>Please enter Malaysia phone number only.</p>
+    </ion-item>
+    <ion-item>
+      <ion-label>Address</ion-label>
+      <ion-textarea class="ion-text-end" minlength="5" maxlength="200" formControlName="address" [(ngModel)]="address" placeholder={{address}} [disabled]="enableEdit == false"></ion-textarea>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!profileForm.controls.phoneNumber.valid && profileForm.controls.phoneNumber.touched" [hidden]="enableEdit == false">
+      <p>Required.</p>
+    </ion-item>
+  </form>
+  <br><br>
 </ion-content>

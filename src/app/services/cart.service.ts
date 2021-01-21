@@ -25,6 +25,8 @@ export class CartService {
   private cart = [];
   private cartItemCount = new BehaviorSubject(0);
 
+  public address: string;
+
   constructor() { }
   
   getProduct(shopID) {

@@ -18,6 +18,7 @@
       <ion-input type="password" name="password" [(ngModel)]="confirmPwd" required></ion-input>
     </ion-item>
     
-    <ion-button style="padding-top: 10%;" class="ion-padding" expand="full" color="dark" (click)="register()">Register</ion-button>
+    <ion-button style="padding-top: 10%;" class="ion-padding" expand="full" color="dark" (click)="register('rider')">Register as rider</ion-button>
+    <ion-button style="padding-top: 10%;" class="ion-padding" expand="full" color="dark" (click)="register('customer')">Register as customer</ion-button>
     <ion-button style="padding-top: 10%;" class="ion-padding" expand="full" color="light" [routerLink]="['/login']">Login</ion-button>
 </ion-content>

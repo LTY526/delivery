@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path: 'cart-modal',
     loadChildren: () => import('./cart-modal/cart-modal.module').then( m => m.CartModalPageModule)
+  },
+  {
+    path: 'select-map-modal',
+    loadChildren: () => import('./select-map-modal/select-map-modal.module').then( m => m.SelectMapModalPageModule)
   }
 ];
 
