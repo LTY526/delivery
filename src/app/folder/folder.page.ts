@@ -21,6 +21,13 @@ export class FolderPage implements OnInit {
   public folder: string;
   public profileForm: FormGroup;
   //homepage
+  slideImage = [
+    '../../assets/runcit/oil5kg.jpg', 
+    '../../assets/runcit/beras5kg.jpeg', 
+    '../../assets/runcit/egg.png',
+    '../../assets/vegetable/carrot.jpg',
+    '../../assets/tesco/face-mask.jpg',
+  ]
   menuOpen: boolean = false;
   canBeginShop: boolean = false;
   //profile page
