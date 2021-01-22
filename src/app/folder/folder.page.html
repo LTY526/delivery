@@ -45,8 +45,8 @@
 <ion-content *ngIf="folder == 'Orders'" [fullscreen]="true">
   <ion-card *ngFor="let o of this.orderList">
     <ion-card-header>
-      <b>Order:</b> #{{o.orderID}}
-      <b>Created:</b> {{o.date}}
+      <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+      <p><b>Created:</b> {{o.date}}</p>
 
       <p><b>Status: </b> 
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>

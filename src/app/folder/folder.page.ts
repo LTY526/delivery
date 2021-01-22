@@ -101,6 +101,7 @@ export class FolderPage implements OnInit {
   //order page
   getOrders(uid: string){
     this.firestore.firestore.collection('order').where('customerUID', '==', uid).onSnapshot(res => {
+      console.log(res.empty);
       res.forEach(order => {
         this.orderListObj[order.id] = order.data();
         this.orderListObj[order.id].orderID = order.id;

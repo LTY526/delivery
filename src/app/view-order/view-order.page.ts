@@ -31,7 +31,6 @@ export class ViewOrderPage implements OnInit {
   statusColorStyle: string;
   riderName: string;
 
-  title = "app";
   elementType: 'url' | 'canvas' | 'img' = 'canvas';
   qrdata: any;
 
@@ -89,11 +88,20 @@ export class ViewOrderPage implements OnInit {
   scanQrCode() {
     this.qrdata = null;
     this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      this.qrdata = barcodeData;
+      console.log(barcodeData, this.qrdata, barcodeData.text);
+      this.assignqrvalue(barcodeData.text)
     }).catch(err => {
       console.log('Error', err);
     });
+  }
+  
+  //test function
+  assignqrvalue(value: any) {
+    if(value) {
+      this.qrdata = value;
+    } else {
+      this.qrdata = "12312412312123";
+    }
   }
 
   verifyDelivery() {

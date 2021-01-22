@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController, NavController } from '@ionic/angular';
+import { AuthStateService } from 'src/app/services/auth-state.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class LoginPage implements OnInit {
     private afAuth: AngularFireAuth,
     private navCtrl: NavController,
     private toastSvc: ToastService,
+    private authStateSvc: AuthStateService,
   ) { }
 
   ngOnInit() {
@@ -35,7 +37,8 @@ export class LoginPage implements OnInit {
           .then(_=> {
             return this.afAuth.signInWithEmailAndPassword(this.email, this.password)
           })
-          .then(data => {
+          .then(async data => {
+            await this.authStateSvc.init();
             this.toastSvc.showToast("Welcome back, " + data.user.email);
             this.navCtrl.navigateRoot("/folder/Main");
           });

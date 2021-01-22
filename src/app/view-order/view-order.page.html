@@ -10,9 +10,8 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <b>Order:</b> #{{orderID}}
-      <b>Created:</b> {{date}}
-      <!--try customize status wording and color-->
+      <p style="font-size: 17px;"><b>Order:</b> #{{orderID}}</p>
+      <p><b>Created:</b> {{date}}</p>
       <p><b>Status: </b> 
         <span [style]="statusColorStyle" *ngIf="status == 'created'">Order created.</span>
         <span [style]="statusColorStyle" *ngIf="status == 'pickup'">Rider has picked up your order.</span>
@@ -35,8 +34,8 @@
       </ion-list>
     </ion-card-content>
     <ion-item>
-      <p style="font-size: 15px;">Total Amount: {{total | currency:'RM'}}</p>
-      <p style="font-size: 15px;">Paid with: Credit Card</p>
+      <p style="font-size: 15px;">Total Amount: {{total | currency:'RM'}}</p><br>
+      <p style="font-size: 15px;">&nbsp;Paid with: Credit Card</p>
     </ion-item>
     <ion-item>
       <p style="font-size: 15px;">Deliver to: {{deliveryAddress}}</p>
@@ -52,6 +51,7 @@
     <ion-button style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="scanQrCode()">test scan qr</ion-button>
   </ion-card>
   <!--for future rider generate show qr result to let scan-->
+  <ion-button (click)="assignqrvalue()">Debug(feed value to qrvalue variable)</ion-button>
   <ngx-qrcode
     [elementType] = "elementType" 
     [value] = "qrdata">
