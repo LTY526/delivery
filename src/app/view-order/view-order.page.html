@@ -51,4 +51,9 @@
     <ion-button *ngIf="status == 'indelivery'" style="float: left; margin-bottom: 3%; margin-right: 3%;">Verify Delivery</ion-button>
     <ion-button style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="scanQrCode()">test scan qr</ion-button>
   </ion-card>
+  <!--for future rider generate show qr result to let scan-->
+  <ngx-qrcode
+    [elementType] = "elementType" 
+    [value] = "qrdata">
+  </ngx-qrcode>
 </ion-content>

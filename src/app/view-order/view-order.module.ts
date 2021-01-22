@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ViewOrderPageRoutingModule } from './view-order-routing.module';
 
 import { ViewOrderPage } from './view-order.page';
+import { NgxQRCodeModule } from 'ngx-qrcode2'
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ViewOrderPageRoutingModule
+    ViewOrderPageRoutingModule,
+    NgxQRCodeModule
   ],
   declarations: [ViewOrderPage]
 })

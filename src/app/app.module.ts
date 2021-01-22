@@ -16,6 +16,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
 import { CartModalPageModule } from './cart-modal/cart-modal.module';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { NgxQRCodeModule } from 'ngx-qrcode2'
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,10 +31,12 @@ import { CartModalPageModule } from './cart-modal/cart-modal.module';
     AngularFirestoreModule,
     AngularFireStorageModule,
     CartModalPageModule,
+    NgxQRCodeModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    BarcodeScanner,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -6,6 +6,7 @@ import { AuthStateService } from '../services/auth-state.service';
 import { CartService } from '../services/cart.service';
 import { ToastService } from '../services/toast.service';
 import * as firebase from 'firebase/app';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @Component({
   selector: 'app-view-order',
@@ -30,6 +31,10 @@ export class ViewOrderPage implements OnInit {
   statusColorStyle: string;
   riderName: string;
 
+  title = "app";
+  elementType: 'url' | 'canvas' | 'img' = 'canvas';
+  qrdata: any;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
@@ -39,12 +44,14 @@ export class ViewOrderPage implements OnInit {
     private firestore: AngularFirestore,
     private modalCtrl: ModalController,
     public cartSvc: CartService,
+    private barcodeScanner: BarcodeScanner,
   ) { }
 
   async ngOnInit() {
     this.orderID = this.activatedRoute.snapshot.paramMap.get('id');
     this.dateNow = firebase.default.firestore.Timestamp.fromDate(new Date());
     await this.loadOrder(this.orderID);
+    this.value = this.orderID;
   }
 
   async loadOrder(orderID: string) {
@@ -82,7 +89,13 @@ export class ViewOrderPage implements OnInit {
   }
 
   scanQrCode() {
-    //to be implemented
+    this.qrdata = null;
+    this.barcodeScanner.scan().then(barcodeData => {
+      console.log('Barcode data', barcodeData);
+      this.qrdata = barcodeData;
+    }).catch(err => {
+      console.log('Error', err);
+    });
   }
 
   verifyDelivery() {

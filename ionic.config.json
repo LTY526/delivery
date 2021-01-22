@@ -1,7 +1,8 @@
 {
   "name": "delivery",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
