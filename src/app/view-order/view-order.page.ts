@@ -42,7 +42,6 @@ export class ViewOrderPage implements OnInit {
     private loadingCtrl: LoadingController,
     private toastSvc: ToastService,
     private firestore: AngularFirestore,
-    private modalCtrl: ModalController,
     public cartSvc: CartService,
     private barcodeScanner: BarcodeScanner,
   ) { }
@@ -51,7 +50,6 @@ export class ViewOrderPage implements OnInit {
     this.orderID = this.activatedRoute.snapshot.paramMap.get('id');
     this.dateNow = firebase.default.firestore.Timestamp.fromDate(new Date());
     await this.loadOrder(this.orderID);
-    this.value = this.orderID;
   }
 
   async loadOrder(orderID: string) {
