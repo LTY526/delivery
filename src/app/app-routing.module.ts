@@ -40,6 +40,14 @@ const routes: Routes = [
   {
     path: 'view-order/:id',
     loadChildren: () => import('./view-order/view-order.module').then( m => m.ViewOrderPageModule)
+  },
+  {
+    path: 'rider-view-order/:id',
+    loadChildren: () => import('./rider-view-order/rider-view-order.module').then( m => m.RiderViewOrderPageModule)
+  },
+  {
+    path: 'qr-modal',
+    loadChildren: () => import('./qr-modal/qr-modal.module').then( m => m.QrModalPageModule)
   }
 ];
 

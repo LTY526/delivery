@@ -38,6 +38,14 @@ export class FolderPage implements OnInit {
   enableEdit: boolean = false;
   profileImageURL: string;
 
+  //rider home page
+  neworderListObj = {};
+  neworderList = [];
+
+  //rider order page
+  riderOrderListObj = {};
+  riderOrderList = [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
@@ -49,6 +57,7 @@ export class FolderPage implements OnInit {
     private firestore: AngularFirestore,
     private modalCtrl: ModalController,
     public cartSvc: CartService,
+    private alertCtrl: AlertController,
   ) { 
     this.profileForm = formBuilder.group({
       email: [
@@ -73,10 +82,16 @@ export class FolderPage implements OnInit {
     this.dateNow = firebase.default.firestore.Timestamp.fromDate(new Date());
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
     await this.loadProfile(this.authStateSvc.uid);
-    this.getOrders(this.authStateSvc.uid);
+    if(this.authStateSvc.customer == true) {
+      this.getOrders(this.authStateSvc.uid);
+    }
+    if(this.authStateSvc.rider == true) {
+      this.riderGetOrders(this.authStateSvc.uid);
+    }
+    this.getnewOrders();
   }
 
-  //home page
+  //customer home page
   async pickAddress(selection: number) {
     //reset
     this.cartSvc.address = null;
@@ -98,10 +113,9 @@ export class FolderPage implements OnInit {
     this.navCtrl.navigateForward(['/shop-list']);
   }
 
-  //order page
+  //customer order page
   getOrders(uid: string){
     this.firestore.firestore.collection('order').where('customerUID', '==', uid).onSnapshot(res => {
-      console.log(res.empty);
       res.forEach(order => {
         this.orderListObj[order.id] = order.data();
         this.orderListObj[order.id].orderID = order.id;
@@ -111,7 +125,6 @@ export class FolderPage implements OnInit {
         this.orderListObj[order.id].statusColorStyle = this.statusColor(order.data().status);
       });
       this.orderList = Object.values(this.orderListObj);
-      console.log(this.orderList);
     });
   }
 
@@ -131,7 +144,6 @@ export class FolderPage implements OnInit {
 
   //profile page
   getProfile(uid: string) {
-    console.log(uid)
     this.itemsCollection = this.firestore.collection<any>('userInformation', ref => ref.where('uid', '==', uid));
     return this.itemsCollection.snapshotChanges().pipe(map((info: any[]) => {
       this.info = [];
@@ -277,4 +289,64 @@ export class FolderPage implements OnInit {
     this.toastSvc.showToast("Updated.");
     this.enableEdit = !this.enableEdit;
   }
+
+  //riderorder
+  getnewOrders(){
+    this.firestore.firestore.collection('order').where('riderUID', '==', null).where('status', '==', 'created').onSnapshot(res => {
+      res.forEach(order => {
+        this.neworderListObj[order.id] = order.data();
+        this.neworderListObj[order.id].orderID = order.id;
+        this.neworderListObj[order.id].date = order.data().created.toDate();
+        this.neworderListObj[order.id].duration = this.dateNow - order.data().created; //elapsed time
+        this.neworderListObj[order.id].updated = this.dateNow - order.data().updated; //last updated
+        if(order.data().customerUID) {
+          this.firestore.firestore.collection('userInformation').doc(order.data().customerUID).get().then(ress => {
+            this.neworderListObj[order.id].customerName = ress.data().realName;
+          });
+        }
+      });
+      this.neworderList = Object.values(this.neworderListObj);
+    });
+  }
+
+  async acceptOrder(orderID: string) {
+    let loader = this.loadingCtrl.create({
+      message: "Please wait..."
+    });
+    (await loader).present();
+    await this.firestore.collection('order').doc(orderID).update({
+      riderUID: this.authStateSvc.uid,
+      status: 'pickup',
+      updated: firebase.default.firestore.Timestamp.fromDate(new Date()),
+      updatedBy: 'rider',
+    });
+    (await loader).dismiss();
+    this.viewJobOrder(orderID);
+    this.toastSvc.showToast("Job accepted.");
+  }
+
+  //riderorderpage
+  riderGetOrders(riderUID: string){
+    this.firestore.firestore.collection('order').where('riderUID', '==', riderUID).onSnapshot(res => {
+      res.forEach(order => {
+        this.riderOrderListObj[order.id] = order.data();
+        this.riderOrderListObj[order.id].orderID = order.id;
+        this.riderOrderListObj[order.id].date = order.data().created.toDate();
+        this.riderOrderListObj[order.id].duration = this.dateNow - order.data().created; //elapsed time
+        this.riderOrderListObj[order.id].updated = this.dateNow - order.data().updated; //last updated
+        this.riderOrderListObj[order.id].statusColorStyle = this.statusColor(order.data().status);
+        if(order.data().customerUID) {
+          this.firestore.firestore.collection('userInformation').doc(order.data().customerUID).get().then(ress => {
+            this.riderOrderListObj[order.id].customerName = ress.data().realName;
+          });
+        }
+      });
+      this.riderOrderList = Object.values(this.riderOrderListObj);
+    });
+  }
+
+  viewJobOrder(orderID: string) {
+    this.navCtrl.navigateForward(['/rider-view-order/' + orderID]);
+  }
+
 }

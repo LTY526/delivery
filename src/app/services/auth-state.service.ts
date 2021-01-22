@@ -29,4 +29,11 @@ export class AuthStateService {
       });
     });
   }
+
+  clear() {
+    this.email = null;
+    this.uid = null;
+    this.rider = false;
+    this.customer = false;
+  }
 }

@@ -1,0 +1,16 @@
+<ion-content fullscreen>
+ 
+  <div class="ion-text-end">
+    <ion-button (click)="close()" fill="clear" color="dark">
+      <ion-icon name="close" slot="start"></ion-icon>
+    </ion-button>
+  </div>
+  <br>
+  <div class="ion-padding qrDiv">
+    <ngx-qrcode 
+    [elementType] = "elementType" 
+    [value] = "qrdata">
+    </ngx-qrcode>
+  </div>
+ 
+</ion-content>

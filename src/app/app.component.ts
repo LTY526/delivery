@@ -37,13 +37,18 @@ export class AppComponent implements OnInit {
   public riderappPages = [
     {
       title: 'Home',
-      url: '/folder/RiderMain',
+      url: '/folder/Main',
       icon: 'home'
     },
     {
-      title: 'Other Function',
-      url: '/folder/RiderOFunc',
-      icon: 'paper-plane'
+      title: 'Job Order',
+      url: '/folder/RiderOrders',
+      icon: 'checkmark-done-circle'
+    },
+    {
+      title: 'Profile',
+      url: '/folder/Profile',
+      icon: 'person-circle'
     },
   ];
   //public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
@@ -64,7 +69,7 @@ export class AppComponent implements OnInit {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.fcmService.initPush();
@@ -99,6 +104,7 @@ export class AppComponent implements OnInit {
   async logout() {
     await this.firestore.collection('token').doc(this.authStateSvc.uid).delete();
     await this.afAuth.signOut();
+    this.authStateSvc.clear();
     this.toastSvc.showToast("Goodbye");
     this.navCtrl.navigateRoot("/login");
   }

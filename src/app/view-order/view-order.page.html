@@ -15,7 +15,7 @@
       <p><b>Status: </b> 
         <span [style]="statusColorStyle" *ngIf="status == 'created'">Order created.</span>
         <span [style]="statusColorStyle" *ngIf="status == 'pickup'">Rider has picked up your order.</span>
-        <span [style]="statusColorStyle" *ngIf="status == 'indelivery'">Rider is delivering your products.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'indelivery'">Rider is delivering your order.</span>
       </p>
       <p><b>Last updated:</b> {{(updated/60).toFixed(0)}} mins ago</p>
     </ion-card-header>

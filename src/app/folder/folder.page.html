@@ -8,7 +8,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="folder == 'Main'" [fullscreen]="true" >
+<ion-content *ngIf="authStateSvc.customer === true && folder == 'Main'" [fullscreen]="true" >
+  <ion-item *ngIf="!realName || !phoneNumber || !address">Please complete your personal information before start using the application.</ion-item>
   <ion-card>
     <ion-item>
       <ion-avatar>
@@ -51,7 +52,7 @@
       <p><b>Status: </b> 
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">Rider has picked up your order.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your products.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your order.</span>
       </p>
     </ion-card-header>
     <ion-card-content>
@@ -125,4 +126,87 @@
   <ion-button class="ion-padding" expand="block" (click)="openEdit()" *ngIf="enableEdit == false">Edit</ion-button>
   <ion-button class="ion-padding" expand="block" (click)="discardEdit()" *ngIf="enableEdit == true">Cancel</ion-button>
   <br>
+</ion-content>
+
+<ion-content *ngIf="authStateSvc.rider === true && folder == 'Main'" [fullscreen]="true">
+  <ion-item *ngIf="!realName || !phoneNumber || !address">Please complete your personal information before start using the application.</ion-item>
+  <ion-card>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src='assets/image/default-profile.jpg' *ngIf="!image"></ion-img>
+        <ion-img [src]="image" *ngIf="image"></ion-img>
+      </ion-avatar>
+      <ion-label style="margin-left: 5%;">
+        <h3>{{realName}}</h3>
+        <p>{{authStateSvc.email}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ng-container *ngFor="let o of this.neworderList">
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;Available Job Orders:</p>
+  <ion-card *ngIf="o.status == 'created'">
+    <ion-card-header>
+      <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+      <p><b>Elapsed:</b> {{(o.duration/60).toFixed(0)}} mins</p>
+    </ion-card-header>
+    <ion-card-content>
+      Items:
+      <ion-list>
+        <ion-item *ngFor="let x of o.order">
+          <div class="imgDiv">
+            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+          </div>
+          <ion-label>
+            <h2>{{x.name}}</h2>
+            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-card-content>
+      <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+      <p style="font-size: 15px;">Deliver to:</p>
+      <p style="font-size: 15px;">{{o.customerName}}</p>
+      <p style="font-size: 15px;">{{o.deliveryAddress}}</p>
+    </ion-card-content>
+    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="acceptOrder(o.orderID)">Accept</ion-button>
+  </ion-card>
+  </ng-container>
+</ion-content>
+
+<ion-content *ngIf="folder == 'RiderOrders'" [fullscreen]="true">
+  <ion-card *ngFor="let o of this.riderOrderList">
+    <ion-card-header>
+      <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+      <p><b>Created:</b> {{o.date}}</p>
+      <p><b>Elapsed:</b> {{(o.duration/60).toFixed(0)}} mins</p>
+      <p><b>Status: </b> 
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">You have picked up the order.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">You are delivering the order.</span>
+      </p>
+    </ion-card-header>
+    <ion-card-content>
+      Items:
+      <ion-list>
+        <ion-item *ngFor="let x of o.order">
+          <div class="imgDiv">
+            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+          </div>
+          <ion-label>
+            <h2>{{x.name}}</h2>
+            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-card-content>
+      <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+      <p style="font-size: 15px;">Deliver to:</p>
+      <p style="font-size: 15px;">{{o.customerName}}</p>
+      <p style="font-size: 15px;">{{o.deliveryAddress}}</p>
+    </ion-card-content>
+    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewJobOrder(o.orderID)">View</ion-button>
+  </ion-card>
 </ion-content>

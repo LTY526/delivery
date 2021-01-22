@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AuthStateService } from 'src/app/services/auth-state.service';
 import { ToastService } from '../../services/toast.service';
+import { AppComponent } from '../../app.component'
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private toastSvc: ToastService,
     private authStateSvc: AuthStateService,
+    private appComponent: AppComponent
   ) { }
 
   ngOnInit() {

@@ -72,10 +72,11 @@ export class CartModalPage implements OnInit {
       customerUID: this.authStateSvc.uid,
       order: this.cart,
       deliveryAddress: this.cartService.address,
-      timestamp: firebase.default.firestore.Timestamp.fromDate(new Date()),
+      created: firebase.default.firestore.Timestamp.fromDate(new Date()),
       status: 'created',
       riderUID: null,
       total: this.total,
+      updated: firebase.default.firestore.Timestamp.fromDate(new Date()),
       updatedBy: "customer",
     };
     let loader = this.loadingCtrl.create({

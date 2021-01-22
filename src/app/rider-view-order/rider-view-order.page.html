@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="myBackButton()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Job Order Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <p style="font-size: 17px;"><b>Order:</b> #{{orderID}}</p>
+      <p><b>Created:</b> {{date}}</p>
+      <p><b>Elapsed:</b> {{(duration/60).toFixed(0)}} mins</p>
+      <p><b>Status: </b> 
+        <span [style]="statusColorStyle" *ngIf="status == 'created'">Order created.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'pickup'">You have picked up the order.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'indelivery'">You are delivering the order.</span>
+      </p>
+      <p><b>Last updated:</b> {{(updated/60).toFixed(0)}} mins ago</p>
+    </ion-card-header>
+    <ion-card-content>
+      Items:
+      <ion-list>
+        <ion-item *ngFor="let x of order">
+          <div class="imgDiv">
+            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+          </div>
+          <ion-label>
+            <h2>{{x.name}}</h2>
+            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-card-content>
+      <p style="font-size: 15px;">Total Amount: {{total | currency:'RM'}}</p>
+      <p style="font-size: 15px;">Paid with: Credit Card</p>
+      <p style="font-size: 15px;">Deliver to:</p>
+      <p style="font-size: 15px;">{{customerName}}</p>
+      <p style="font-size: 15px;">{{deliveryAddress}}</p>
+    </ion-card-content>
+    <ion-item *ngIf="status == 'indelivery' || status == 'pickup'">
+      <p style="font-size: 15px;">Actions:</p>
+    </ion-item>
+    <ion-button *ngIf="status == 'pickup'" style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="beginDelivery()">Product Ready, Begin Delivery.</ion-button>
+    <ion-button *ngIf="status == 'indelivery'" style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="generateQRCode()">I have reached. Show QR.</ion-button>
+  </ion-card>
+  <!--<ngx-qrcode
+    [elementType] = "elementType" 
+    [value] = "qrdata">
+  </ngx-qrcode>-->
+</ion-content>
