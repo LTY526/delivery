@@ -23,12 +23,9 @@
     <ion-card-header>
       <ion-card-title>
         Deliver to: 
-        <ion-button class="btns" size="small" (click)="openMenu()">
-          <ion-icon style="font-size: 15px;" slot="icon-only" name="caret-down-outline"></ion-icon>
-        </ion-button>
       </ion-card-title>
     </ion-card-header>
-    <ion-item *ngIf="menuOpen == true">
+    <ion-item>
       <ion-label text-wrap>
         <h2>
           <ion-button (click)="pickAddress(1)" style="height: 40px;" expand="block">Current Address</ion-button>
@@ -43,14 +40,6 @@
       <br>
     </ion-card-content>
   </ion-card>
-  <ion-slides pager style="margin-top: 20%;">
-    <ion-slide *ngFor="let i of slideImage">
-      <div class="slide" style="width: 300px; height: 300px;">
-        <ion-img style="width: 300px; height: 240px;" [src]=i></ion-img>
-      </div>
-    </ion-slide>
-  </ion-slides>
-  <p>What to put in this picture space?</p>
 </ion-content>
 
 <ion-content *ngIf="folder == 'Orders'" [fullscreen]="true">
@@ -58,10 +47,12 @@
     <ion-card-header>
       <b>Order:</b> #{{o.orderID}}
       <b>Created:</b> {{o.date}}
-    </ion-card-header>
-    <ion-card-header>
-      <!--try customize status wording and color-->
-      <b>Status:</b> {{o.status}}
+
+      <p><b>Status: </b> 
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">Rider has picked up your order.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your products.</span>
+      </p>
     </ion-card-header>
     <ion-card-content>
       Items:
@@ -81,7 +72,7 @@
       <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
       <p style="font-size: 15px;">Estimated Delivery Time: 10minutes</p>
     </ion-item>
-    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.id)">View</ion-button>
+    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.orderID)">View</ion-button>
   </ion-card>
 </ion-content>
 

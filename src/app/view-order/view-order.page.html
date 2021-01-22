@@ -1,9 +1,54 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>viewOrder</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="myBackButton()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Order Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card>
+    <ion-card-header>
+      <b>Order:</b> #{{orderID}}
+      <b>Created:</b> {{date}}
+      <!--try customize status wording and color-->
+      <p><b>Status: </b> 
+        <span [style]="statusColorStyle" *ngIf="status == 'created'">Order created.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'pickup'">Rider has picked up your order.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'indelivery'">Rider is delivering your products.</span>
+      </p>
+      <p><b>Last updated:</b> {{(updated/60).toFixed(0)}} mins ago</p>
+    </ion-card-header>
+    <ion-card-content>
+      Items:
+      <ion-list>
+        <ion-item *ngFor="let x of order">
+          <div class="imgDiv">
+            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+          </div>
+          <ion-label>
+            <h2>{{x.name}}</h2>
+            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-item>
+      <p style="font-size: 15px;">Total Amount: {{total | currency:'RM'}}</p>
+      <p style="font-size: 15px;">Paid with: Credit Card</p>
+    </ion-item>
+    <ion-item>
+      <p style="font-size: 15px;">Deliver to: {{deliveryAddress}}</p>
+    </ion-item>
+    <ion-item>
+      <p *ngIf="riderUID == null" style="font-size: 15px;">Rider's Name: Not available yet</p>
+      <p *ngIf="riderUID != null" style="font-size: 15px;">Rider's Name: {{riderName}}</p>
+    </ion-item>
+    <ion-item *ngIf="status == 'indelivery'">
+      <p style="font-size: 15px;">Order reached?</p>
+    </ion-item>
+    <ion-button *ngIf="status == 'indelivery'" style="float: left; margin-bottom: 3%; margin-right: 3%;">Verify Delivery</ion-button>
+    <ion-button style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="scanQrCode()">test scan qr</ion-button>
+  </ion-card>
 </ion-content>

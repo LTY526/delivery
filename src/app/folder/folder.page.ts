@@ -22,14 +22,6 @@ export class FolderPage implements OnInit {
   public folder: string;
   public profileForm: FormGroup;
   //homepage
-  slideImage = [
-    '../../assets/runcit/oil5kg.jpg', 
-    '../../assets/runcit/beras5kg.jpeg', 
-    '../../assets/runcit/egg.png',
-    '../../assets/vegetable/carrot.jpg',
-    '../../assets/tesco/face-mask.jpg',
-  ]
-  menuOpen: boolean = false;
   canBeginShop: boolean = false;
   //order page
   orderListObj = {};
@@ -55,7 +47,6 @@ export class FolderPage implements OnInit {
     private loadingCtrl: LoadingController,
     private toastSvc: ToastService,
     private firestore: AngularFirestore,
-    private afAuth: AngularFireAuth,
     private modalCtrl: ModalController,
     public cartSvc: CartService,
   ) { 
@@ -85,9 +76,6 @@ export class FolderPage implements OnInit {
     this.getOrders(this.authStateSvc.uid);
   }
 
-  openMenu() {
-    this.menuOpen = !this.menuOpen;
-  }
   //home page
   async pickAddress(selection: number) {
     //reset
@@ -96,10 +84,8 @@ export class FolderPage implements OnInit {
     if(selection == 1) {
       this.cartSvc.address = this.address;
       this.canBeginShop = true;
-      this.menuOpen = !this.menuOpen;
     } else if(selection == 2){
       this.canBeginShop = true;
-      this.menuOpen = !this.menuOpen;
       let modal = await this.modalCtrl.create({
         component: SelectMapModalPage,
         cssClass: 'select-map-modal'
@@ -118,12 +104,24 @@ export class FolderPage implements OnInit {
       res.forEach(order => {
         this.orderListObj[order.id] = order.data();
         this.orderListObj[order.id].orderID = order.id;
-        this.orderListObj[order.id].date = order.data().timestamp.toDate();
-        this.orderListObj[order.id].duration = this.dateNow - order.data().timestamp;
+        this.orderListObj[order.id].date = order.data().created.toDate();
+        this.orderListObj[order.id].duration = this.dateNow - order.data().created; //elapsed time
+        this.orderListObj[order.id].updated = this.dateNow - order.data().updated; //last updated
+        this.orderListObj[order.id].statusColorStyle = this.statusColor(order.data().status);
       });
       this.orderList = Object.values(this.orderListObj);
       console.log(this.orderList);
     });
+  }
+
+  statusColor(status: string) {
+    if(status == "created") {
+      return "color: orange; font-size: 15px;"
+    } else if(status == "pickup") {
+      return "color: yellow; font-size: 15px;"
+    } else if(status == "indelivery") {
+      return "color: green; font-size: 15px;"
+    }
   }
 
   viewOrder(orderID: string) {
