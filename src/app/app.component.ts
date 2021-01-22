@@ -8,6 +8,7 @@ import { AuthStateService } from './services/auth-state.service'
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ToastService } from './services/toast.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { FcmService } from './services/fcm.service';
 
 @Component({
   selector: 'app-root',
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit {
     private navCtrl: NavController,
     private toastSvc: ToastService,
     private afAuth: AngularFireAuth,
+    private fcmService: FcmService,
   ) {
     this.initializeApp();
   }
@@ -65,6 +67,7 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.fcmService.initPush();
     });
   }
 
