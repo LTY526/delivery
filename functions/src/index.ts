@@ -109,10 +109,11 @@ export const verifyTheOrder = functions.https.onCall(async (data, context) => {
     const customerUID: string = data.customerUID;
     await admin.firestore().collection('order').doc(orderID).get().then(async res => {
         if(res.exists) {
+            const resOrderID = res?.id;
             const resRiderUID = res?.data()?.riderUID;
             const resCustomerUID = res?.data()?.customerUID;
             console.log(riderUID, resRiderUID, customerUID, resCustomerUID);
-            if(riderUID === resRiderUID && customerUID === resCustomerUID) {
+            if(riderUID === resRiderUID && customerUID === resCustomerUID && orderID === resOrderID) {
                 //means correct people and can proceed to close the order
                 await admin.firestore().collection('order').doc(orderID).update({
                     status: 'delivered',
@@ -121,7 +122,7 @@ export const verifyTheOrder = functions.https.onCall(async (data, context) => {
                 }).catch(err => console.log(err));
                 result = true ;
             } else {
-                //wrong people
+                //wrong people or wrong order
                 result = false;
             }
         } else {
