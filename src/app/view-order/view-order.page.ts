@@ -92,10 +92,21 @@ export class ViewOrderPage implements OnInit {
 
   scanQrCode() {
     this.qrdata = null;
-    this.barcodeScanner.scan().then(barcodeData => {
+    this.barcodeScanner.scan().then(async barcodeData => {
       console.log(barcodeData, this.qrdata, barcodeData.text);
       if(barcodeData.text) {
-        this.verifyDelivery(barcodeData.text);
+        let orderID = barcodeData.text.substring(0, barcodeData.text.indexOf(','));
+        let riderUID = barcodeData.text.substring((barcodeData.text.indexOf(',') + 1));
+        if(orderID == this.orderID) {
+          this.verifyDelivery(barcodeData.text);
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Wrong code.',
+            message: 'Make sure you are scanning for the correct order.',
+            buttons: ['OK']
+          });
+          await alert.present();
+        }
       }
     }).catch(err => {
       console.log('Error', err);

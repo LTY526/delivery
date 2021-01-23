@@ -104,6 +104,7 @@ export class RiderViewOrderPage implements OnInit {
   }
 
   notifyCustomerCloudFunction(orderID: string, status: string) {
+    console.log("notifyCustomerCloudFunction: reached")
     const callable = this.functions.httpsCallable('notifyTheCustomer');
     const obs = callable({
       orderID: orderID,
