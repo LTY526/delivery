@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { ActivatedRoute } from '@angular/router';
-import { LoadingController, ModalController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { AuthStateService } from '../services/auth-state.service';
 import { CartService } from '../services/cart.service';
 import { ToastService } from '../services/toast.service';
@@ -43,6 +44,8 @@ export class ViewOrderPage implements OnInit {
     private firestore: AngularFirestore,
     public cartSvc: CartService,
     private barcodeScanner: BarcodeScanner,
+    private functions: AngularFireFunctions,
+    private alertController: AlertController,
   ) { }
 
   async ngOnInit() {
@@ -79,9 +82,11 @@ export class ViewOrderPage implements OnInit {
     if(status == "created") {
       this.statusColorStyle = "color: orange; font-size: 15px;"
     } else if(status == "pickup") {
-      this.statusColorStyle = "color: yellow; font-size: 15px;"
+      this.statusColorStyle = "color: orange; font-size: 15px;"
     } else if(status == "indelivery") {
       this.statusColorStyle = "color: green; font-size: 15px;"
+    } else {
+      this.statusColorStyle = "font-size: 15px;"
     }
   }
 
@@ -89,23 +94,45 @@ export class ViewOrderPage implements OnInit {
     this.qrdata = null;
     this.barcodeScanner.scan().then(barcodeData => {
       console.log(barcodeData, this.qrdata, barcodeData.text);
-      this.assignqrvalue(barcodeData.text)
+      if(barcodeData.text) {
+        this.verifyDelivery(barcodeData.text);
+      }
     }).catch(err => {
       console.log('Error', err);
     });
   }
-  
-  //test function
-  assignqrvalue(value: any) {
-    if(value) {
-      this.qrdata = value;
-    } else {
-      this.qrdata = "12312412312123";
-    }
-  }
 
-  verifyDelivery() {
-    //to be implemented
+  async verifyDelivery(barcodeData: string) {
+    let orderID = barcodeData.substring(0, barcodeData.indexOf(','));
+    let riderUID = barcodeData.substring((barcodeData.indexOf(',') + 1));
+    console.log(orderID, riderUID);
+
+    let loader = this.loadingCtrl.create({
+      message: "Please wait..."
+    });
+    (await loader).present();
+
+    const callable = this.functions.httpsCallable('verifyTheOrder');
+    const obs = callable({
+      orderID: orderID,
+      riderUID: riderUID,
+      customerUID: this.authStateSvc.uid,
+    });
+    console.log(obs);
+    obs.subscribe(async res => {
+      if(res) {
+        console.log(res);
+        if(res.result == true) {
+          const alert = await this.alertController.create({
+            header: 'Order has been confirmed delivered.',
+            message: 'Enjoy the products.',
+            buttons: ['OK']
+          });
+          await alert.present();
+        }
+        (await loader).dismiss();
+      }
+    });
   }
 
   myBackButton(){

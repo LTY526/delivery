@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.lty.delivery;
 
 import android.os.Bundle;
 

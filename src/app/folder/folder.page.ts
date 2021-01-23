@@ -132,7 +132,7 @@ export class FolderPage implements OnInit {
     if(status == "created") {
       return "color: orange; font-size: 15px;"
     } else if(status == "pickup") {
-      return "color: yellow; font-size: 15px;"
+      return "color: orange; font-size: 15px;"
     } else if(status == "indelivery") {
       return "color: green; font-size: 15px;"
     }

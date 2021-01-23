@@ -53,6 +53,7 @@
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">Rider has picked up your order.</span>
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your order.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">Rider has delivered your order.</span>
       </p>
     </ion-card-header>
     <ion-card-content>
@@ -185,6 +186,7 @@
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">You have picked up the order.</span>
         <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">You are delivering the order.</span>
+        <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">You have delivered the order.</span>
       </p>
     </ion-card-header>
     <ion-card-content>

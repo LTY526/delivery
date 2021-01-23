@@ -79,7 +79,7 @@ export class RiderViewOrderPage implements OnInit {
     if(status == "created") {
       this.statusColorStyle = "color: orange; font-size: 15px;"
     } else if(status == "pickup") {
-      this.statusColorStyle = "color: yellow; font-size: 15px;"
+      this.statusColorStyle = "color: orange; font-size: 15px;"
     } else if(status == "indelivery") {
       this.statusColorStyle = "color: green; font-size: 15px;"
     }

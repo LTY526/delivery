@@ -16,6 +16,7 @@
         <span [style]="statusColorStyle" *ngIf="status == 'created'">Order created.</span>
         <span [style]="statusColorStyle" *ngIf="status == 'pickup'">Rider has picked up your order.</span>
         <span [style]="statusColorStyle" *ngIf="status == 'indelivery'">Rider is delivering your order.</span>
+        <span [style]="statusColorStyle" *ngIf="status == 'delivered'">Rider has delivered your order.</span>
       </p>
       <p><b>Last updated:</b> {{(updated/60).toFixed(0)}} mins ago</p>
     </ion-card-header>
@@ -47,11 +48,8 @@
     <ion-item *ngIf="status == 'indelivery'">
       <p style="font-size: 15px;">Order reached?</p>
     </ion-item>
-    <ion-button *ngIf="status == 'indelivery'" style="float: left; margin-bottom: 3%; margin-right: 3%;">Verify Delivery</ion-button>
-    <ion-button style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="scanQrCode()">test scan qr</ion-button>
+    <ion-button *ngIf="status == 'indelivery'" style="float: left; margin-bottom: 3%; margin-right: 3%;" (click)="scanQrCode()">Rider arrived. Scan QR.</ion-button>
   </ion-card>
-  <!--for future rider generate show qr result to let scan-->
-  <ion-button (click)="assignqrvalue()">Debug(feed value to qrvalue variable)</ion-button>
   <ngx-qrcode
     [elementType] = "elementType" 
     [value] = "qrdata">
