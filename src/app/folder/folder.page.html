@@ -37,7 +37,6 @@
     <ion-item *ngIf="canBeginShop == true && cartSvc.address != null">{{cartSvc.address}}</ion-item>
     <ion-card-content *ngIf="canBeginShop == true && cartSvc.address != null">
       <ion-button class="ion-padding" expand="block" color="warning" (click)="viewShop()">Shop now</ion-button>
-      <ion-button style="padding-top: 10%;" class="ion-padding" expand="block" color="danger" (click)="viewShop()">View Shop</ion-button>
       <br>
     </ion-card-content>
   </ion-card>
