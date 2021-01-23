@@ -61,19 +61,17 @@ export const notifyTheCustomer = functions.https.onCall(async (data, context) =>
         if(res.exists) {
             customerUID = res?.data()?.customerUID;
             await admin.firestore().collection('token').doc(customerUID).get().then(ress => {
-                if(!res?.data()?.value) return;
-                else customerToken = res?.data()?.value;
+                customerToken = ress?.data()?.value;
             }).catch(err => console.log(err));
         }
-    }).then(async _ => {
+    }).then(async ress => {
         //get rider's name
-        console.log("notifyTheCustomer: reached");
         await admin.firestore().collection('userInformation').doc(riderUID).get().then(res => {
             if(res.exists) {
                 riderName = res?.data()?.realName;
             }
         }).catch(err => console.log(err));
-    }).then(_ => {
+    }).then(resss => {
         if(status == 'pickup') {
             const payload = {
                 notification: {
