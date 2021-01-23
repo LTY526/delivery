@@ -93,6 +93,13 @@ export class FolderPage implements OnInit {
     this.getnewOrders();
   }
 
+  async doRefresh(event) {
+    console.log(event);
+    this.getnewOrders();
+    if (event)
+      event.target.complete();
+  }
+
   //customer home page
   async pickAddress(selection: number) {
     //reset
@@ -294,7 +301,7 @@ export class FolderPage implements OnInit {
 
   //riderorder
   getnewOrders(){
-    this.firestore.firestore.collection('order').where('riderUID', '==', null).where('status', '==', 'created').onSnapshot(res => {
+    this.firestore.firestore.collection('order').where('riderUID', '==', null).where('status', '==', 'created').where('riderUID', '==', null).onSnapshot(res => {
       res.forEach(order => {
         this.neworderListObj[order.id] = order.data();
         this.neworderListObj[order.id].orderID = order.id;

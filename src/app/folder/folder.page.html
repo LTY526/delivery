@@ -144,6 +144,7 @@
 </ion-content>
 
 <ion-content *ngIf="authStateSvc.rider === true && folder == 'Main'" [fullscreen]="true">
+  <ion-refresher (ionRefresh)="doRefresh($event)" slot="fixed"></ion-refresher>
   <ion-item *ngIf="!realName || !phoneNumber || !address">Please complete your personal information before start using the application.</ion-item>
   <ion-card>
     <ion-item>
@@ -157,9 +158,8 @@
       </ion-label>
     </ion-item>
   </ion-card>
-
-  <ng-container *ngFor="let o of this.neworderList">
   <p>&nbsp;&nbsp;&nbsp;&nbsp;Available Job Orders:</p>
+  <ng-container *ngFor="let o of this.neworderList">
   <ion-card *ngIf="o.status == 'created'">
     <ion-card-header>
       <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
