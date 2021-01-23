@@ -124,8 +124,15 @@ export class ViewOrderPage implements OnInit {
         console.log(res);
         if(res.result == true) {
           const alert = await this.alertController.create({
-            header: 'Order has been confirmed delivered.',
+            header: 'Order delivered.',
             message: 'Enjoy the products.',
+            buttons: ['OK']
+          });
+          await alert.present();
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Something wrong happened.',
+            message: 'Please try again.',
             buttons: ['OK']
           });
           await alert.present();

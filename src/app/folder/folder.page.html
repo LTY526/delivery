@@ -44,38 +44,52 @@
 </ion-content>
 
 <ion-content *ngIf="folder == 'Orders'" [fullscreen]="true">
-  <ion-card *ngFor="let o of this.orderList">
-    <ion-card-header>
-      <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
-      <p><b>Created:</b> {{o.date}}</p>
+  <p style="margin-left: 3%;">Ongoing Orders: </p>
+  <ng-container *ngFor="let o of this.orderList">
+    <ion-card *ngIf="o.status != 'delivered'">
+      <ion-card-header>
+        <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+        <p><b>Created:</b> {{o.date}}</p>
+        <p><b>Status: </b> 
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">Rider has picked up your order.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your order.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">Rider has delivered your order.</span>
+        </p>
+      </ion-card-header>
+      <ion-card-content>
+        Items:
+        <ion-list>
+          <ion-item *ngFor="let x of o.order">
+            <div class="imgDiv">
+              <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+            </div>
+            <ion-label>
+              <h2>{{x.name}}</h2>
+              <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+      <ion-item>
+        <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+        <p style="font-size: 15px;">Estimated Delivery Time: 10minutes</p>
+      </ion-item>
+      <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.orderID)">View</ion-button>
+    </ion-card>
+  </ng-container>
 
-      <p><b>Status: </b> 
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">Rider has picked up your order.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">Rider is delivering your order.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">Rider has delivered your order.</span>
-      </p>
-    </ion-card-header>
-    <ion-card-content>
-      Items:
-      <ion-list>
-        <ion-item *ngFor="let x of o.order">
-          <div class="imgDiv">
-            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
-          </div>
-          <ion-label>
-            <h2>{{x.name}}</h2>
-            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-    <ion-item>
-      <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
-      <p style="font-size: 15px;">Estimated Delivery Time: 10minutes</p>
-    </ion-item>
-    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.orderID)">View</ion-button>
-  </ion-card>
+  <p style="margin-left: 3%;">Completed Orders: </p>
+  <ng-container *ngFor="let o of this.orderList">
+    <ion-card *ngIf="o.status == 'delivered'">
+      <ion-card-header>
+        <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+        <p><b>Created:</b> {{o.date}}</p>
+        <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+      </ion-card-header>
+      <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewOrder(o.orderID)">View</ion-button>
+    </ion-card>
+  </ng-container>
 </ion-content>
 
 <ion-content *ngIf="folder == 'Profile'" [fullscreen]="true">
@@ -177,38 +191,53 @@
 </ion-content>
 
 <ion-content *ngIf="folder == 'RiderOrders'" [fullscreen]="true">
-  <ion-card *ngFor="let o of this.riderOrderList">
-    <ion-card-header>
-      <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
-      <p><b>Created:</b> {{o.date}}</p>
-      <p><b>Elapsed:</b> {{(o.duration/60).toFixed(0)}} mins</p>
-      <p><b>Status: </b> 
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">You have picked up the order.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">You are delivering the order.</span>
-        <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">You have delivered the order.</span>
-      </p>
-    </ion-card-header>
-    <ion-card-content>
-      Items:
-      <ion-list>
-        <ion-item *ngFor="let x of o.order">
-          <div class="imgDiv">
-            <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
-          </div>
-          <ion-label>
-            <h2>{{x.name}}</h2>
-            <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-    <ion-card-content>
-      <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
-      <p style="font-size: 15px;">Deliver to:</p>
-      <p style="font-size: 15px;">{{o.customerName}}</p>
-      <p style="font-size: 15px;">{{o.deliveryAddress}}</p>
-    </ion-card-content>
-    <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewJobOrder(o.orderID)">View</ion-button>
-  </ion-card>
+  <p style="margin-left: 3%;">Ongoing Job Orders: </p>
+  <ng-container *ngFor="let o of this.riderOrderList">
+    <ion-card *ngIf="o.status != 'delivered'">
+      <ion-card-header>
+        <p style="font-size: 17px;"><b>Order:</b> #{{o.orderID}}</p>
+        <p><b>Created:</b> {{o.date}}</p>
+        <p><b>Elapsed:</b> {{(o.duration/60).toFixed(0)}} mins</p>
+        <p><b>Status: </b> 
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'created'">Order created.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'pickup'">You have picked up the order.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'indelivery'">You are delivering the order.</span>
+          <span [style]="o.statusColorStyle" *ngIf="o.status == 'delivered'">You have delivered the order.</span>
+        </p>
+      </ion-card-header>
+      <ion-card-content>
+        Items:
+        <ion-list>
+          <ion-item *ngFor="let x of o.order">
+            <div class="imgDiv">
+              <ion-img class="itemImg" slot="start" [src]=x.image></ion-img>
+            </div>
+            <ion-label>
+              <h2>{{x.name}}</h2>
+              <p>{{x.price | currency:'RM'}} x {{x.amount}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+      <ion-card-content>
+        <p style="font-size: 15px;">Total Amount: {{o.total | currency:'RM'}}</p>
+        <p style="font-size: 15px;">Deliver to:</p>
+        <p style="font-size: 15px;">{{o.customerName}}</p>
+        <p style="font-size: 15px;">{{o.deliveryAddress}}</p>
+      </ion-card-content>
+      <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewJobOrder(o.orderID)">View</ion-button>
+    </ion-card>
+  </ng-container>
+
+  <p style="margin-left: 3%;">Completed Job Orders: </p>
+  <ng-container *ngFor="let o of this.riderOrderList">
+    <ion-card *ngIf="o.status == 'delivered'">
+      <ion-card-header>
+        <p style="font-size: 15px;"><b>Order:</b> #{{o.orderID}}</p>
+        <p><b>Created:</b> {{o.date}}</p>
+        <p style="font-size: 15px;">Deliver to: {{o.customerName}}</p>
+      </ion-card-header>
+      <ion-button style="float: right; margin-bottom: 3%; margin-right: 3%;" (click)="viewJobOrder(o.orderID)">View</ion-button>
+    </ion-card>
+  </ng-container>
 </ion-content>
