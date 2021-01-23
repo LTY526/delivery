@@ -7,6 +7,7 @@ import { CartService } from '../services/cart.service';
 import { ToastService } from '../services/toast.service';
 import * as firebase from 'firebase/app';
 import { QrModalPage } from '../qr-modal/qr-modal.page';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Component({
   selector: 'app-rider-view-order',
@@ -43,6 +44,7 @@ export class RiderViewOrderPage implements OnInit {
     private firestore: AngularFirestore,
     public cartSvc: CartService,
     private modalCtrl: ModalController,
+    private functions: AngularFireFunctions,
   ) { }
 
   async ngOnInit() {
@@ -96,8 +98,19 @@ export class RiderViewOrderPage implements OnInit {
       updated: firebase.default.firestore.Timestamp.fromDate(new Date()),
       updatedBy: 'rider',
     });
+    this.notifyCustomerCloudFunction(this.orderID, 'indelivery');
     (await loader).dismiss();
     this.toastSvc.showToast("Status updated, begin delivery.")
+  }
+
+  notifyCustomerCloudFunction(orderID: string, status: string) {
+    const callable = this.functions.httpsCallable('notifyTheCustomer');
+    const obs = callable({
+      orderID: orderID,
+      status: status,
+      riderUID: this.authStateSvc.uid,
+    });
+    obs.subscribe();
   }
   
   async generateQRCode() {

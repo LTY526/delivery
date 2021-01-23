@@ -11,6 +11,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { SelectMapModalPage } from '../select-map-modal/select-map-modal.page';
 import { CartService } from '../services/cart.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Component({
   selector: 'app-folder',
@@ -58,6 +59,7 @@ export class FolderPage implements OnInit {
     private modalCtrl: ModalController,
     public cartSvc: CartService,
     private alertCtrl: AlertController,
+    private functions: AngularFireFunctions,
   ) { 
     this.profileForm = formBuilder.group({
       email: [
@@ -135,7 +137,7 @@ export class FolderPage implements OnInit {
       return "color: orange; font-size: 15px;"
     } else if(status == "indelivery") {
       return "color: green; font-size: 15px;"
-    }
+    } else return "font-size: 15px;"
   }
 
   viewOrder(orderID: string) {
@@ -320,9 +322,20 @@ export class FolderPage implements OnInit {
       updated: firebase.default.firestore.Timestamp.fromDate(new Date()),
       updatedBy: 'rider',
     });
+    this.notifyCustomerCloudFunction(orderID, 'pickup');
     (await loader).dismiss();
     this.viewJobOrder(orderID);
     this.toastSvc.showToast("Job accepted.");
+  }
+
+  notifyCustomerCloudFunction(orderID: string, status: string) {
+    const callable = this.functions.httpsCallable('notifyTheCustomer');
+    const obs = callable({
+      orderID: orderID,
+      status: status,
+      riderUID: this.authStateSvc.uid,
+    });
+    obs.subscribe();
   }
 
   //riderorderpage
