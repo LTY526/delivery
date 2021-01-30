@@ -3,8 +3,9 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title *ngIf="folder != 'Main'">{{ folder }}</ion-title>
+    <ion-title *ngIf="folder != 'Main' && folder != 'RiderOrders'">{{ folder }}</ion-title>
     <ion-title *ngIf="folder == 'Main'">Home</ion-title>
+    <ion-title *ngIf="folder == 'RiderOrders'">Job Orders</ion-title>
   </ion-toolbar>
 </ion-header>
 
