@@ -22,7 +22,7 @@ export class CartService {
     {id: 'v03', name: 'Kailan 100g', price: 3, image: '../../assets/vegetable/kailan.jpg', amount: 0},
   ];
 
-  private cart = [];
+  public cart = [];
   private cartItemCount = new BehaviorSubject(0);
 
   public address: string;
@@ -84,6 +84,11 @@ export class CartService {
         this.cart.splice(index, 1);
       }
     }
+  }
+
+  clearCart() {
+    this.cart.length = 0;
+    this.cartItemCount.next(0);
   }
 }
 export interface Product {

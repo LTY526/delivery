@@ -93,7 +93,7 @@ export class CartModalPage implements OnInit {
     });
     alert.present().then(() => {
       this.modalCtrl.dismiss();
+      this.cartService.clearCart();
     });
   }
-
 }
